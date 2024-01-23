@@ -14,7 +14,7 @@ export class GameManager {
      */
     static startGame(ctx) {
         const testObj = new TestGameObject();
-        GameObjectManager.registerGameObject()
+        GameObjectManager.registerGameObject(testObj);
         window.requestAnimationFrame(() => GameObjectManager.renderGameObjectsByFrame(ctx));
     }
 }

@@ -20,11 +20,11 @@ export class GameObjectManager {
      */
     static renderGameObjectsByFrame(ctx) {
         this.gameObjList.forEach((obj) => {
-            obj.render(ctx)
+            obj.render(ctx);
         })
         // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
-        // ctx.beginPath();
-        // ctx.restore();
+        ctx.beginPath();
+        ctx.restore();
     }
 
     /**
