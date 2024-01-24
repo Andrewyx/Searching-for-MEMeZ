@@ -1,11 +1,12 @@
 import {GameObject} from "../engine/GameObject.js";
 import {AssetManager} from "../engine/AssetManager.js";
 import '../engine/utils/matter.js';
+import {getRectRigidBody} from "../engine/utils/RigidBodyUtils.js";
 
 export class TestGameObject extends GameObject {
 
     constructor() {
-        const rigidBody = Matter.Bodies.rectangle(0, 0, 50, 50);
+        const rigidBody = getRectRigidBody(0, 0, 50, 50);
         super("test", 0, 0, 50, 50, rigidBody);
     }
 

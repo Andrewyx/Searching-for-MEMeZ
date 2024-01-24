@@ -44,7 +44,7 @@ export class GameObject {
     update() {
         // sync the obj position with rBody
         if (this.isRigidBody()) {
-            const {x, y} = this.rBody.position;
+            const {x, y} = this.rBody.bounds.min;
             this.x = x;
             this.y = y;
         }
