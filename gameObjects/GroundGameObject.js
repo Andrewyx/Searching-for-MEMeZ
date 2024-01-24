@@ -9,6 +9,8 @@ export class GroundGameObject extends GameObject {
         const rigidBody = getRectRigidBody(x, y, width, height, {
             isStatic: true,
             frictionAir: 0,
+            friction:0,
+            staticFriction:0
         })
         super(name, x, y, width, height, rigidBody);
     }

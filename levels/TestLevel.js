@@ -2,6 +2,7 @@ import {GameObjectManager} from '../engine/GameObjectManager.js';
 import {TestGameObject} from "../gameObjects/TestGameObject.js";
 import {GroundGameObject} from "../gameObjects/GroundGameObject.js";
 import {AssetManager} from "../engine/AssetManager.js";
+import {BaseLevel} from "./BaseLevel.js";
 
 
 // TestGameObj
@@ -13,7 +14,7 @@ const WALL_LEFT = new GroundGameObject("wall_left", 0, 0, 20, 500);
 /**
  * Test Level 1
  */
-export class TestLevel {
+export class TestLevel extends BaseLevel{
 
     /**
      * start game
@@ -44,16 +45,28 @@ export class TestLevel {
 
 
         // event listeners should be added here
-        document.addEventListener('keydown', (event) => {
+        document.addEventListener('keypress', (event) => {
             switch (event.key) {
                 case "a":
-                    Matter.Body.applyForce(TEST_OBJ.rBody, TEST_OBJ.rBody.position, {x: -0.03, y: 0});
+                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: -2, y:TEST_OBJ.rBody.velocity.y})
+
                     break;
                 case "d":
-                    Matter.Body.applyForce(TEST_OBJ.rBody, TEST_OBJ.rBody.position, {x: 0.03, y: 0});
+                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: 2, y:TEST_OBJ.rBody.velocity.y})
                     break;
                 case "w":
                     Matter.Body.applyForce(TEST_OBJ.rBody, TEST_OBJ.rBody.position, {x: 0, y: -0.05});
+                    break;
+            }
+        });
+
+        document.addEventListener('keyup', (event) => {
+            switch (event.key) {
+                case "a":
+                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: 0, y:TEST_OBJ.rBody.velocity.y})
+                    break;
+                case "d":
+                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: 2, y:TEST_OBJ.rBody.velocity.y})
                     break;
             }
         });

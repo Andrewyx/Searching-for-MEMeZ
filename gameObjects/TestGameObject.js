@@ -5,11 +5,16 @@ import {getRectRigidBody} from "../engine/utils/RigidBodyUtils.js";
 
 export class TestGameObject extends GameObject {
 
+    // is the object on ground
+    onGround = true;
+
     constructor() {
         const rigidBody = getRectRigidBody(250, 0, 50, 50, {
-            friction: 0.1,
+            friction: 0,
             frictionStatic: 0,
             frictionAir: 0,
+            staticFriction:0,
+            inertia: Infinity
         });
         super("test", 250, 0, 50, 50, rigidBody);
     }
@@ -18,5 +23,9 @@ export class TestGameObject extends GameObject {
         // ctx.fillStyle = "yellow";
         // ctx.fillRect(this.x, this.y, this.width, this.height);
         ctx.drawImage(AssetManager.assets.get("tests/testObj.png"), this.x, this.y, this.width, this.height);
+    }
+
+    update() {
+        super.update();
     }
 }
