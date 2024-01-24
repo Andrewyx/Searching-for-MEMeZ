@@ -1,8 +1,13 @@
+import './utils/matter.js';
+
 /**
  * Manager all the game objects and render them
  */
 
 export class GameObjectManager {
+    // physics engine
+    static PHYSICS_ENGINE = Matter.Engine.create();
+
     // list of game objects registered
     static gameObjList = [];
 
@@ -11,6 +16,12 @@ export class GameObjectManager {
      * @param gameObj gameObject
      */
     static registerGameObject(gameObj) {
+        // if the obj is rigid body, then add it to the engine
+        if (gameObj.isRigidBody()) {
+            Matter.Composite.add(
+                GameObjectManager.PHYSICS_ENGINE.world, [gameObj.rBody]
+            );
+        }
         this.gameObjList.push(gameObj);
     }
 
@@ -19,12 +30,16 @@ export class GameObjectManager {
      * @param ctx canvas context
      */
     static renderGameObjectsByFrame(ctx) {
-        this.gameObjList.forEach((obj) => {
-            obj.render(ctx);
-        })
-        // ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+        ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.beginPath();
         ctx.restore();
+
+        this.gameObjList.forEach((obj) => {
+            obj.update();
+            obj.render(ctx);
+        })
+        Matter.Engine.update(GameObjectManager.PHYSICS_ENGINE);
+        requestAnimationFrame(() => this.renderGameObjectsByFrame(ctx))
     }
 
     /**
@@ -39,5 +54,12 @@ export class GameObjectManager {
             }
         }
         return undefined;
+    }
+
+    /**
+     * Clear all register game objects
+     */
+    static clearAllGameObjects() {
+        this.gameObjList = [];
     }
 }

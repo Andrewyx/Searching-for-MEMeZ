@@ -9,6 +9,7 @@ export class GameObject {
     name;
     width;
     height;
+    rBody;
 
     /**
      * construct a game object
@@ -18,13 +19,15 @@ export class GameObject {
      * @param y y coordinate of the center of the game object
      * @param width width of the entire game object
      * @param height height of the entire game object
+     * @param rBody rigid body bind to the object
      */
-    constructor(name, x, y, width, height) {
+    constructor(name, x, y, width, height, rBody) {
         this.name = name;
         this.width = width;
         this.height = height
         this.x = x;
         this.y = y;
+        this.rBody = rBody;
     }
 
     /**
@@ -39,14 +42,19 @@ export class GameObject {
      * Update the object according to its physical properties
      */
     update() {
-
+        // sync the obj position with rBody
+        if (this.isRigidBody()) {
+            const {x, y} = this.rBody.position;
+            this.x = x;
+            this.y = y;
+        }
     }
 
     /**
-     * Get collision box of the obj
+     * return true if the current obj is a rigid body and participates in physical simulation
+     * @returns {boolean}
      */
-    getCollisionBox() {
-
+    isRigidBody() {
+        return this.rBody !== null && this.rBody !== undefined;
     }
-
 }
