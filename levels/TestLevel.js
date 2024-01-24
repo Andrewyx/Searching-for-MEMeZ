@@ -1,11 +1,14 @@
 import {GameObjectManager} from '../engine/GameObjectManager.js';
 import {TestGameObject} from "../gameObjects/TestGameObject.js";
+import {GroundGameObject} from "../gameObjects/GroundGameObject.js";
 import {AssetManager} from "../engine/AssetManager.js";
 
 
 
 // TestGameObj
 const TEST_OBJ = new TestGameObject();
+const GROUND_BOTTOM = new GroundGameObject("bottom_ground", 0, 500, 500, 20);
+
 const SPEED = 5;
 
 
@@ -20,11 +23,9 @@ export class TestLevel {
      */
     static startLevel(ctx) {
         console.log("Test Level Init");
-        // start matter physical simulation
-        const engine = Matter.Engine.create();
-
         // register game object
         GameObjectManager.registerGameObject(TEST_OBJ);
+        GameObjectManager.registerGameObject(GROUND_BOTTOM);
 
         // start to render the level
         TestLevel.updateLevel(ctx);
@@ -33,13 +34,14 @@ export class TestLevel {
         document.addEventListener('keydown', (event) => {
             switch (event.key) {
                 case "a":
-                    TEST_OBJ.x -= SPEED;
+                    Matter.Body.set(TEST_OBJ.rBody, {x: TEST_OBJ.x += SPEED, y: TEST_OBJ.y})
+                    TEST_OBJ.update()
                     break;
                 case "w":
                     TEST_OBJ.y -= SPEED;
                     break;
                 case "s":
-                    TEST_OBJ.y += SPEED;
+                    TEST_OBJ.rBody.x += SPEED;
                     break;
                 case "d":
                     TEST_OBJ.x += SPEED;
