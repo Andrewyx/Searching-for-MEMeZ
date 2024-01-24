@@ -1,13 +1,15 @@
 import {GameObject} from "../engine/GameObject.js";
-import {AssetManager} from "../engine/AssetManager.js";
 import {getRectRigidBody} from "../engine/utils/RigidBodyUtils.js";
 
 /**
  * Ground
  */
-export class GroundGameObject extends GameObject{
+export class GroundGameObject extends GameObject {
     constructor(name, x, y, width, height) {
-        const rigidBody = getRectRigidBody(x, y, width, height, {isStatic: true})
+        const rigidBody = getRectRigidBody(x, y, width, height, {
+            isStatic: true,
+            frictionAir: 0,
+        })
         super(name, x, y, width, height, rigidBody);
     }
 

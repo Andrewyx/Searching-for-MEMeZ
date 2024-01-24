@@ -6,8 +6,12 @@ import {getRectRigidBody} from "../engine/utils/RigidBodyUtils.js";
 export class TestGameObject extends GameObject {
 
     constructor() {
-        const rigidBody = getRectRigidBody(0, 0, 50, 50);
-        super("test", 0, 0, 50, 50, rigidBody);
+        const rigidBody = getRectRigidBody(250, 0, 50, 50, {
+            friction: 0.1,
+            frictionStatic: 0,
+            frictionAir: 0,
+        });
+        super("test", 250, 0, 50, 50, rigidBody);
     }
 
     render(ctx) {

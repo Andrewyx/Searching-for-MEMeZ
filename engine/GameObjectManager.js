@@ -39,7 +39,7 @@ export class GameObjectManager {
             obj.render(ctx);
         })
         Matter.Engine.update(GameObjectManager.PHYSICS_ENGINE);
-        requestAnimationFrame(() => this.renderGameObjectsByFrame(ctx))
+        // requestAnimationFrame(() => this.renderGameObjectsByFrame(ctx))
     }
 
     /**

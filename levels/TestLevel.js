@@ -4,12 +4,10 @@ import {GroundGameObject} from "../gameObjects/GroundGameObject.js";
 import {AssetManager} from "../engine/AssetManager.js";
 
 
-
 // TestGameObj
 const TEST_OBJ = new TestGameObject();
 const GROUND_BOTTOM = new GroundGameObject("bottom_ground", 0, 500, 500, 20);
-
-const SPEED = 5;
+const WALL_LEFT = new GroundGameObject("wall_left", 0, 0, 20, 500);
 
 
 /**
@@ -26,28 +24,39 @@ export class TestLevel {
         // register game object
         GameObjectManager.registerGameObject(TEST_OBJ);
         GameObjectManager.registerGameObject(GROUND_BOTTOM);
+        GameObjectManager.registerGameObject(WALL_LEFT);
 
         // start to render the level
         TestLevel.updateLevel(ctx);
+
+        // FIXME: Test code
+        const render = Matter.Render.create({
+            element: document.body,
+            engine: GameObjectManager.PHYSICS_ENGINE,
+            options: {
+                width: 800,
+                height: 600,
+                showVelocity: true
+            }
+        });
+
+        Matter.Render.run(render);
+
 
         // event listeners should be added here
         document.addEventListener('keydown', (event) => {
             switch (event.key) {
                 case "a":
-                    Matter.Body.set(TEST_OBJ.rBody, {x: TEST_OBJ.x += SPEED, y: TEST_OBJ.y})
-                    TEST_OBJ.update()
-                    break;
-                case "w":
-                    TEST_OBJ.y -= SPEED;
-                    break;
-                case "s":
-                    TEST_OBJ.rBody.x += SPEED;
+                    Matter.Body.applyForce(TEST_OBJ.rBody, TEST_OBJ.rBody.position, {x: -0.03, y: 0});
                     break;
                 case "d":
-                    TEST_OBJ.x += SPEED;
+                    Matter.Body.applyForce(TEST_OBJ.rBody, TEST_OBJ.rBody.position, {x: 0.03, y: 0});
+                    break;
+                case "w":
+                    Matter.Body.applyForce(TEST_OBJ.rBody, TEST_OBJ.rBody.position, {x: 0, y: -0.05});
                     break;
             }
-        })
+        });
     }
 
     /**
