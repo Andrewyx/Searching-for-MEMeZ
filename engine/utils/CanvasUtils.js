@@ -17,3 +17,14 @@ export const resizeCanvas = (canvas, ctx) => {
 
     ctx.scale(dpr, dpr)
 }
+
+/**
+ * Create a new cache canvas context (off-screen)
+ * @param width width of canvas
+ * @param height height of canvas
+ * @return {CanvasRenderingContext2D} canvas context
+ */
+export const createCacheCanvasCtx = (width, height) => {
+    let canvas = new OffscreenCanvas(width, height);
+    return canvas.getContext('2d');
+}

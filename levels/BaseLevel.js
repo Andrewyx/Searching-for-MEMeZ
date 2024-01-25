@@ -1,3 +1,5 @@
+import {AssetManager} from "../engine/AssetManager.js";
+
 /**
  * Abstract class for levels
  * All level classes will be a child of this class.
@@ -25,9 +27,10 @@ export class BaseLevel {
 
     /**
      * Preload assets
+     * @param callback callback function when complete
      * @return {Promise<void>} promise of assets
      */
-    static async preload() {
-
+    static async preload(callback) {
+        await AssetManager.preloadAllAssets(callback);
     }
 }

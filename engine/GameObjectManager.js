@@ -32,7 +32,6 @@ export class GameObjectManager {
     static renderGameObjectsByFrame(ctx) {
         ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
         ctx.beginPath();
-        ctx.restore();
 
         this.gameObjList.forEach((obj) => {
             obj.update();

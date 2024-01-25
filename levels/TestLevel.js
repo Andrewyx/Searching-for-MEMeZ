@@ -45,14 +45,14 @@ export class TestLevel extends BaseLevel{
 
 
         // event listeners should be added here
+        // move the rigid body when key is pressed
         document.addEventListener('keypress', (event) => {
             switch (event.key) {
                 case "a":
-                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: -2, y:TEST_OBJ.rBody.velocity.y})
-
+                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: -2, y:TEST_OBJ.rBody.velocity.y});
                     break;
                 case "d":
-                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: 2, y:TEST_OBJ.rBody.velocity.y})
+                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: 2, y:TEST_OBJ.rBody.velocity.y});
                     break;
                 case "w":
                     Matter.Body.applyForce(TEST_OBJ.rBody, TEST_OBJ.rBody.position, {x: 0, y: -0.05});
@@ -60,13 +60,14 @@ export class TestLevel extends BaseLevel{
             }
         });
 
+        // cancel velocity when the key is no longer pressed
         document.addEventListener('keyup', (event) => {
             switch (event.key) {
                 case "a":
-                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: 0, y:TEST_OBJ.rBody.velocity.y})
+                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: 0, y:TEST_OBJ.rBody.velocity.y});
                     break;
                 case "d":
-                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: 2, y:TEST_OBJ.rBody.velocity.y})
+                    Matter.Body.setVelocity(TEST_OBJ.rBody, {x: 2, y:TEST_OBJ.rBody.velocity.y});
                     break;
             }
         });
@@ -89,6 +90,6 @@ export class TestLevel extends BaseLevel{
         AssetManager.registerAssetUrl("tests/testObj.png");
 
         // call preload to load all assets
-        await AssetManager.preloadAllAssets(callback);
+        await super.preload(callback);
     }
 }
