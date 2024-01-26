@@ -1,7 +1,7 @@
 import {BaseLevel} from "./BaseLevel.js";
 import {GameObjectManager} from "../engine/GameObjectManager.js";
 import {StartScreenBackgroundObject} from "../gameObjects/startLevel/StartScreenBackgroundObject.js";
-
+import { FirstLevel } from "./FirstLevel.js";
 /**
  * Start scene
  */
@@ -15,6 +15,7 @@ export class StartLevel extends BaseLevel {
         GameObjectManager.registerGameObject(StartLevel.backgroundObj);
 
         // start to render the level
+        
         StartLevel.updateLevel(ctx);
     }
 
