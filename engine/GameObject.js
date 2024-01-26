@@ -10,6 +10,7 @@ export class GameObject {
     width;
     height;
     rBody;
+    hidden;
 
     /**
      * construct a game object
@@ -56,5 +57,13 @@ export class GameObject {
      */
     isRigidBody() {
         return this.rBody !== null && this.rBody !== undefined;
+    }
+
+    /**
+     * set display status
+     * @param hidden whether the object is hidden or not
+     */
+    setHidden(hidden) {
+        this.hidden = hidden;
     }
 }

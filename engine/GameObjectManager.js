@@ -12,6 +12,14 @@ export class GameObjectManager {
     static gameObjList = [];
 
     /**
+     * set physics engine
+     * @param engine new physics engine
+     */
+    static setPhysicsEngine(engine) {
+        this.PHYSICS_ENGINE = engine;
+    }
+
+    /**
      * Register a game object in the game
      * @param gameObj gameObject
      */
@@ -23,6 +31,20 @@ export class GameObjectManager {
             );
         }
         this.gameObjList.push(gameObj);
+    }
+
+    /**
+     * unregister a game object in the game
+     * @param gameObj gameObject
+     */
+    static unregisterGameObject(gameObj) {
+        // if the obj is rigid body, then add it to the engine
+        if (gameObj.isRigidBody()) {
+            Matter.Composite.remove(
+                GameObjectManager.PHYSICS_ENGINE.world, gameObj.rBody
+            );
+        }
+        this.gameObjList.remove(gameObj);
     }
 
     /**

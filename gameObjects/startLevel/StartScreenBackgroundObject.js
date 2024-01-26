@@ -41,22 +41,24 @@ export class StartScreenBackgroundObject extends GameObject {
     }
 
     render(ctx) {
-        this.cacheCtx.fillStyle = this.CLEAR_COLOR;
-        this.cacheCtx.fillRect(this.x, this.y, this.width, this.height);
+        if (!this.hidden) {
+            this.cacheCtx.fillStyle = this.CLEAR_COLOR;
+            this.cacheCtx.fillRect(this.x, this.y, this.width, this.height);
 
-        this.cacheCtx.save();
-        this.cacheCtx.fillStyle = this.wordColor;
-        this.cacheCtx.font = this.fontSize + "px arial";
-        for (let i = 0; i < this.drops.length; i++) {
-            let text = this.CHARS_ARR[Math.floor(Math.random() * this.CHARS_ARR.length)];
-            this.cacheCtx.fillText(text, i * this.fontSize, this.drops[i] * this.fontSize);
-            if (this.drops[i] * this.fontSize > this.height && Math.random() > 0.98) {
-                this.drops[i] = 0;
+            this.cacheCtx.save();
+            this.cacheCtx.fillStyle = this.wordColor;
+            this.cacheCtx.font = this.fontSize + "px arial";
+            for (let i = 0; i < this.drops.length; i++) {
+                let text = this.CHARS_ARR[Math.floor(Math.random() * this.CHARS_ARR.length)];
+                this.cacheCtx.fillText(text, i * this.fontSize, this.drops[i] * this.fontSize);
+                if (this.drops[i] * this.fontSize > this.height && Math.random() > 0.98) {
+                    this.drops[i] = 0;
+                }
+                this.drops[i] += 1;
             }
-            this.drops[i] += 1;
+            this.cacheCtx.restore();
+            ctx.drawImage(this.cacheCtx.canvas, this.x, this.y, this.width, this.height);
         }
-        this.cacheCtx.restore();
-        ctx.drawImage(this.cacheCtx.canvas, this.x, this.y, this.width, this.height);
     }
 
     update() {
