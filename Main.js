@@ -12,4 +12,5 @@ resizeCanvas(canvas, ctx);
 window.addEventListener('resize', () => resizeCanvas(canvas, ctx));
 
 // TestLevel.preload(() => console.log("All assets are loaded")).then(() => TestLevel.startLevel(ctx))
-StartLevel.preload(() => console.log("All assets are loaded")).then(() => StartLevel.startLevel(ctx))
+// StartLevel.preload(() => console.log("All assets are loaded")).then(() => StartLevel.startLevel(ctx))
+FirstLevel.preload(() => console.log("All assets are loaded")).then(() => FirstLevel.startLevel(ctx))
