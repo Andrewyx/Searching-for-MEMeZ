@@ -1,5 +1,5 @@
 import {TestLevel} from './levels/TestLevel.js';
-import {StartLevel} from './levels/StartLevel.js';
+import {StartLevel} from './levels/StartLevel/StartLevel.js';
 import {resizeCanvas} from './engine/utils/CanvasUtils.js';
 
 const canvas = document.getElementById("mainCanvas")

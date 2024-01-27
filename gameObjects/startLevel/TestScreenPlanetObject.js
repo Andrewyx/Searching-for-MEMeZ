@@ -14,7 +14,7 @@ export class TestScreenPlanetObject extends GameObject {
 
     color;
     radius;
-    boundary = {x: 1000, y: 1000};
+    boundary = {x: NaN, y: NaN};
     mass;
     // list of other planets
     attractor = [];
@@ -49,10 +49,12 @@ export class TestScreenPlanetObject extends GameObject {
 
         super(name, x, y, 2 * radius, 2 * radius, rigidBody);
 
-        this.center = {x: boundary.x / 2, y: boundary.y / 2};
         this.radius = radius;
         this.color = color;
-        this.boundary = boundary;
+        if (boundary !== undefined) {
+            this.center = {x: boundary.x / 2, y: boundary.y / 2};
+            this.boundary = boundary;
+        }
         this.mass = mass;
     }
 
@@ -93,10 +95,12 @@ export class TestScreenPlanetObject extends GameObject {
             });
         }
 
-        Matter.Body.applyForce(this.rBody, {x: this.x, y: this.y}, {
-            x: (this.center.x - this.x) / this.boundary.x,
-            y: (this.center.y - this.y) / this.boundary.y
-        });
+        if (this.boundary !== undefined) {
+            Matter.Body.applyForce(this.rBody, {x: this.x, y: this.y}, {
+                x: (this.center.x - this.x) / this.boundary.x,
+                y: (this.center.y - this.y) / this.boundary.y
+            });
+        }
 
         this.x = this.rBody.position.x;
         this.y = this.rBody.position.y;

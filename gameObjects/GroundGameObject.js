@@ -18,6 +18,5 @@ export class GroundGameObject extends GameObject {
     render(ctx) {
         ctx.fillStyle = "yellow";
         ctx.fillRect(this.x, this.y, this.width, this.height);
-        // ctx.fill(AssetManager.assets.get("tests/testObj.png"), this.x, this.y, this.width, this.height);
     }
 }

@@ -1,35 +1,31 @@
-import {BaseLevel} from "./BaseLevel.js";
-import {GameObjectManager} from "../engine/GameObjectManager.js";
-import {StartScreenBackgroundObject} from "../gameObjects/startLevel/StartScreenBackgroundObject.js";
-import {TestScreenPlanetObject} from "../gameObjects/startLevel/TestScreenPlanetObject.js";
+import {BaseLevel} from "../BaseLevel.js";
+import {GameObjectManager} from "../../engine/GameObjectManager.js";
+import {TestScreenPlanetObject} from "../../gameObjects/startLevel/TestScreenPlanetObject.js";
+import {getCenterPoint, globalCoordinateToCanvas} from "../../engine/utils/CanvasUtils.js";
+import {MessageManager} from "../../engine/MessageManager.js";
 
 
 /**
  * Start scene
  */
-export class StartLevel extends BaseLevel {
+export class SideWindow extends BaseLevel {
 
-    static backgroundObj;
     static testBall1;
-    // game state;
-    // 0 -> the title page is not clicked
-    // 1 -> when the title page is clicked, but did not enter test page
-    // 2 -> in the test page
-    static state = 0;
+    static testBall2;
+    static testBall3;
+    static blackHole;
 
     static startLevel(ctx) {
-        console.log("Start Level Init");
-
         GameObjectManager.setPhysicsEngine(Matter.Engine.create({gravity: {scale: 0}}));
         GameObjectManager.PHYSICS_ENGINE.timing.timeScale = 0.2;
 
-        StartLevel.backgroundObj = new StartScreenBackgroundObject(0, 0, ctx.canvas.width, ctx.canvas.height);
+        const center = getCenterPoint(ctx);
 
         this.testBall1 = new TestScreenPlanetObject("ball_1", 0, 0, 30, "red",
             {
                 x: ctx.canvas.width / window.devicePixelRatio,
                 y: ctx.canvas.height / window.devicePixelRatio
-            }, 100, false);
+            }, 50, false);
         this.testBall2 = new TestScreenPlanetObject("ball_2", 1000, 1000, 30, "yellow",
             {
                 x: ctx.canvas.width / window.devicePixelRatio,
@@ -41,48 +37,42 @@ export class StartLevel extends BaseLevel {
                 y: ctx.canvas.height / window.devicePixelRatio
             }, 200, false);
 
-        this.testBall1.setHidden(true);
+        this.blackHole = new TestScreenPlanetObject("blackhole", center.x, center.y, 50, "black",
+            {
+                x: ctx.canvas.width / window.devicePixelRatio,
+                y: ctx.canvas.height / window.devicePixelRatio
+            }, 2000000, true);
+
         this.testBall1.addAttractor(this.testBall2);
         this.testBall1.addAttractor(this.testBall3);
+        this.testBall1.addAttractor(this.blackHole);
 
-        this.testBall2.setHidden(true);
+
         this.testBall2.addAttractor(this.testBall1);
         this.testBall2.addAttractor(this.testBall3);
+        this.testBall1.addAttractor(this.blackHole);
 
-        this.testBall3.setHidden(true);
         this.testBall3.addAttractor(this.testBall1);
         this.testBall3.addAttractor(this.testBall2);
+        this.testBall1.addAttractor(this.blackHole);
 
-        GameObjectManager.registerGameObject(StartLevel.backgroundObj);
         GameObjectManager.registerGameObject(this.testBall1);
         GameObjectManager.registerGameObject(this.testBall2);
         GameObjectManager.registerGameObject(this.testBall3);
+        GameObjectManager.registerGameObject(this.blackHole);
 
         // start to render the level
-        StartLevel.updateLevel(ctx);
-        this.nextState();
+        this.updateLevel(ctx);
     }
 
     static updateLevel(ctx) {
-        if (StartLevel.state === 0) {
-
-        } else if (StartLevel.state === 1) {
-
-        } else {
-
-        }
+        MessageManager.setEventListener((data) => {
+            Matter.Body.setPosition(this.testBall1.rBody, globalCoordinateToCanvas(data['ball1'].x, data['ball1'].y));
+            Matter.Body.setPosition(this.testBall2.rBody, globalCoordinateToCanvas(data['ball2'].x, data['ball2'].y));
+            Matter.Body.setPosition(this.testBall3.rBody, globalCoordinateToCanvas(data['ball3'].x, data['ball3'].y));
+        });
 
         GameObjectManager.renderGameObjectsByFrame(ctx);
         window.requestAnimationFrame(() => this.updateLevel(ctx));
-    }
-
-    static nextState() {
-        if (this.state === 0) {
-            this.backgroundObj.setHidden(true);
-            this.testBall1.setHidden(false);
-            this.testBall2.setHidden(false);
-            this.testBall3.setHidden(false);
-        }
-        this.state++;
     }
 }

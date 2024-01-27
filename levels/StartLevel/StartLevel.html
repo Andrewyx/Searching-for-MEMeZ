@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en" class="main">
+<head>
+    <meta charset="UTF-8">
+    <title>Searching For MEMeZ</title>
+    <link rel="stylesheet" href="../../styles.css">
+</head>
+
+
+<body class="main">
+<!-- Main Canvas of the Game -->
+<canvas id="mainCanvas"></canvas>
+</body>
+
+<script type="module">
+    import {resizeCanvas} from '../../engine/utils/CanvasUtils.js';
+    import {SideWindow} from "./SideWindow.js";
+
+    const canvas = document.getElementById("mainCanvas")
+
+    const ctx = canvas.getContext('2d');
+
+    // resize canvas to get better image quality
+    resizeCanvas(canvas, ctx);
+
+    window.addEventListener('resize', () => resizeCanvas(canvas, ctx));
+
+    SideWindow.preload(() => console.log("All assets are loaded")).then(() => SideWindow.startLevel(ctx))
+</script>
+
+</html>
