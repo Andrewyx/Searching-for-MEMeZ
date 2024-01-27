@@ -18,8 +18,6 @@ export class TestScreenPlanetObject extends GameObject {
     mass;
     // list of other planets
     attractor = [];
-    force;
-
     center;
 
 
@@ -32,31 +30,30 @@ export class TestScreenPlanetObject extends GameObject {
      * @param color color of the ball
      * @param boundary boundary for max x and max y
      * @param mass mass of the planet
-     * @param force velocity of the planet
+     * @param isStatic whether it is static
      */
-    constructor(name, x, y, radius, color, boundary, mass = 1000, force = {x: 100, y: 0}) {
+    constructor(name, x, y, radius, color, boundary, mass = 1000, isStatic = false) {
         const rigidBody = getCircleRigidBody(x, y, radius, {
             mass: mass,
-            inertia: 0,
-            airFriction: 10
+            inertia: 1,
+            airFriction: 1000,
+            isStatic: isStatic
         });
 
-        const center = {x: boundary.x / 2, y: boundary.y / 2};
-        const constraint = Matter.Constraint.create({
-            pointA: center,
-            bodyB: rigidBody,
-            stiffness: 0.001
-        });
+        // cancel collision
+        // rigidBody.collisionFilter = {
+        //     'group': -1,
+        //     'category': 2,
+        //     'mask': 0,
+        // }
 
         super(name, x, y, 2 * radius, 2 * radius, rigidBody);
 
-        // Matter.Composite.add(GameObjectManager.PHYSICS_ENGINE, constraint);
-
+        this.center = {x: boundary.x / 2, y: boundary.y / 2};
         this.radius = radius;
         this.color = color;
         this.boundary = boundary;
         this.mass = mass;
-        this.force = force
     }
 
     render(ctx) {
@@ -80,16 +77,26 @@ export class TestScreenPlanetObject extends GameObject {
     }
 
     update() {
-
         for (const otherPlanet of this.attractor) {
-            const distance = Math.max(Math.sqrt((otherPlanet.x - this.x) ** 2 + (otherPlanet.y - this.y) ** 2), 100);
-            const force = (G * this.mass * otherPlanet.mass) / ((distance ** 2) * 0.5);
+            const distance = Math.max(Math.sqrt((otherPlanet.x - this.x) ** 2 + (otherPlanet.y - this.y) ** 2),
+                (this.radius + otherPlanet.radius) * 2);
+            const force = (G * this.mass * otherPlanet.mass) / (distance ** 2);
             const angle = Matter.Vector.angle(this.rBody.position, otherPlanet.rBody.position);
             Matter.Body.applyForce(this.rBody, {x: this.x, y: this.y}, {
-                x: force * Math.sin(angle) * Math.random(),
-                y: force * Math.cos(angle) * Math.random()
+                x: force * Math.cos(angle) * 0.1,
+                y: force * Math.sin(angle) * 0.1
+            });
+
+            Matter.Body.applyForce(otherPlanet.rBody, {x: otherPlanet.x, y: otherPlanet.y}, {
+                x: -force * Math.cos(angle) * 0.1,
+                y: -force * Math.sin(angle) * 0.1
             });
         }
+
+        Matter.Body.applyForce(this.rBody, {x: this.x, y: this.y}, {
+            x: (this.center.x - this.x) / this.boundary.x,
+            y: (this.center.y - this.y) / this.boundary.y
+        });
 
         this.x = this.rBody.position.x;
         this.y = this.rBody.position.y;

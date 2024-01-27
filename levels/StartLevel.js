@@ -21,21 +21,25 @@ export class StartLevel extends BaseLevel {
         console.log("Start Level Init");
 
         GameObjectManager.setPhysicsEngine(Matter.Engine.create({gravity: {scale: 0}}));
+        GameObjectManager.PHYSICS_ENGINE.timing.timeScale = 0.2;
 
         StartLevel.backgroundObj = new StartScreenBackgroundObject(0, 0, ctx.canvas.width, ctx.canvas.height);
 
-        this.testBall1 = new TestScreenPlanetObject("ball_1", 200, 200, 5, "red", {
-            x: ctx.canvas.width,
-            y: ctx.canvas.height
-        }, 0.5, {x: 0, y: 0});
-        this.testBall2 = new TestScreenPlanetObject("ball_2", 500, 500, 5, "yellow", {
-            x: ctx.canvas.width,
-            y: ctx.canvas.height
-        }, 0.5, {x: 0, y: 0});
-        this.testBall3 = new TestScreenPlanetObject("ball_3", 300, 300, 5, "blue", {
-            x: ctx.canvas.width,
-            y: ctx.canvas.height
-        }, 0.5, {x: 0, y: 0});
+        this.testBall1 = new TestScreenPlanetObject("ball_1", 0, 0, 30, "red",
+            {
+                x: ctx.canvas.width / window.devicePixelRatio,
+                y: ctx.canvas.height / window.devicePixelRatio
+            }, 100, false);
+        this.testBall2 = new TestScreenPlanetObject("ball_2", 1000, 1000, 30, "yellow",
+            {
+                x: ctx.canvas.width / window.devicePixelRatio,
+                y: ctx.canvas.height / window.devicePixelRatio
+            }, 50, false);
+        this.testBall3 = new TestScreenPlanetObject("ball_3", 600, 352, 30, "blue",
+            {
+                x: ctx.canvas.width / window.devicePixelRatio,
+                y: ctx.canvas.height / window.devicePixelRatio
+            }, 200, false);
 
         this.testBall1.setHidden(true);
         this.testBall1.addAttractor(this.testBall2);
@@ -52,7 +56,7 @@ export class StartLevel extends BaseLevel {
         GameObjectManager.registerGameObject(StartLevel.backgroundObj);
         GameObjectManager.registerGameObject(this.testBall1);
         GameObjectManager.registerGameObject(this.testBall2);
-        // GameObjectManager.registerGameObject(this.testBall3);
+        GameObjectManager.registerGameObject(this.testBall3);
 
         // start to render the level
         StartLevel.updateLevel(ctx);
