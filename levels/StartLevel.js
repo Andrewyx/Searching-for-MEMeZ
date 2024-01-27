@@ -27,15 +27,15 @@ export class StartLevel extends BaseLevel {
         this.testBall1 = new TestScreenPlanetObject("ball_1", 200, 200, 5, "red", {
             x: ctx.canvas.width,
             y: ctx.canvas.height
-        }, 10, {x: 0, y: 0});
+        }, 0.5, {x: 0, y: 0});
         this.testBall2 = new TestScreenPlanetObject("ball_2", 500, 500, 5, "yellow", {
             x: ctx.canvas.width,
             y: ctx.canvas.height
-        }, 10, {x: 0, y: 0});
+        }, 0.5, {x: 0, y: 0});
         this.testBall3 = new TestScreenPlanetObject("ball_3", 300, 300, 5, "blue", {
             x: ctx.canvas.width,
             y: ctx.canvas.height
-        }, 10, {x: 0, y: 0});
+        }, 0.5, {x: 0, y: 0});
 
         this.testBall1.setHidden(true);
         this.testBall1.addAttractor(this.testBall2);
@@ -52,7 +52,7 @@ export class StartLevel extends BaseLevel {
         GameObjectManager.registerGameObject(StartLevel.backgroundObj);
         GameObjectManager.registerGameObject(this.testBall1);
         GameObjectManager.registerGameObject(this.testBall2);
-        GameObjectManager.registerGameObject(this.testBall3);
+        // GameObjectManager.registerGameObject(this.testBall3);
 
         // start to render the level
         StartLevel.updateLevel(ctx);

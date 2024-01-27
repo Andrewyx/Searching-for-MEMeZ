@@ -8,7 +8,7 @@ import {GameObjectManager} from "../../engine/GameObjectManager.js";
  */
 
 // Gravitational constant
-const G = 10;
+const G = 5;
 
 export class TestScreenPlanetObject extends GameObject {
 
@@ -37,7 +37,8 @@ export class TestScreenPlanetObject extends GameObject {
     constructor(name, x, y, radius, color, boundary, mass = 1000, force = {x: 100, y: 0}) {
         const rigidBody = getCircleRigidBody(x, y, radius, {
             mass: mass,
-            inertia: 0
+            inertia: 0,
+            airFriction: 10
         });
 
         const center = {x: boundary.x / 2, y: boundary.y / 2};
@@ -81,8 +82,8 @@ export class TestScreenPlanetObject extends GameObject {
     update() {
 
         for (const otherPlanet of this.attractor) {
-            const distance = Math.min(Math.sqrt((otherPlanet.x - this.x) ** 2 + (otherPlanet.y - this.y) ** 2), 100);
-            const force = G * this.mass * otherPlanet.mass / (distance ** 2) * Math.random() * 0.5;
+            const distance = Math.max(Math.sqrt((otherPlanet.x - this.x) ** 2 + (otherPlanet.y - this.y) ** 2), 100);
+            const force = (G * this.mass * otherPlanet.mass) / ((distance ** 2) * 0.5);
             const angle = Matter.Vector.angle(this.rBody.position, otherPlanet.rBody.position);
             Matter.Body.applyForce(this.rBody, {x: this.x, y: this.y}, {
                 x: force * Math.sin(angle) * Math.random(),
