@@ -41,20 +41,18 @@ export class TestScreenPlanetObject extends GameObject {
         });
 
         // cancel collision
-        // rigidBody.collisionFilter = {
-        //     'group': -1,
-        //     'category': 2,
-        //     'mask': 0,
-        // }
+        rigidBody.collisionFilter = {
+            'group': -1,
+            'category': 2,
+            'mask': 0,
+        }
 
         super(name, x, y, 2 * radius, 2 * radius, rigidBody);
 
         this.radius = radius;
         this.color = color;
-        if (boundary !== undefined) {
-            this.center = {x: boundary.x / 2, y: boundary.y / 2};
-            this.boundary = boundary;
-        }
+        this.center = {x: boundary.x / 2, y: boundary.y / 2};
+        this.boundary = boundary;
         this.mass = mass;
     }
 
@@ -95,15 +93,18 @@ export class TestScreenPlanetObject extends GameObject {
             });
         }
 
-        if (this.boundary !== undefined) {
-            Matter.Body.applyForce(this.rBody, {x: this.x, y: this.y}, {
-                x: (this.center.x - this.x) / this.boundary.x,
-                y: (this.center.y - this.y) / this.boundary.y
-            });
-        }
+        Matter.Body.applyForce(this.rBody, {x: this.x, y: this.y}, {
+            x: (this.center.x - this.x) / this.boundary.x,
+            y: (this.center.y - this.y) / this.boundary.y
+        });
 
         this.x = this.rBody.position.x;
         this.y = this.rBody.position.y;
+    }
+
+    setAttractCenter(center) {
+        this.center = center;
+        this.boundary = {x: 400, y:400};
     }
 
     /**

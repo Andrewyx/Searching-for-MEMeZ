@@ -1,7 +1,7 @@
 import {BaseLevel} from "../BaseLevel.js";
 import {GameObjectManager} from "../../engine/GameObjectManager.js";
 import {TestScreenPlanetObject} from "../../gameObjects/startLevel/TestScreenPlanetObject.js";
-import {getCenterPoint, globalCoordinateToCanvas} from "../../engine/utils/CanvasUtils.js";
+import {canvasCoordinateToGlobal, getCenterPoint, globalCoordinateToCanvas} from "../../engine/utils/CanvasUtils.js";
 import {MessageManager} from "../../engine/MessageManager.js";
 
 
@@ -71,6 +71,8 @@ export class SideWindow extends BaseLevel {
             Matter.Body.setPosition(this.testBall2.rBody, globalCoordinateToCanvas(data['ball2'].x, data['ball2'].y));
             Matter.Body.setPosition(this.testBall3.rBody, globalCoordinateToCanvas(data['ball3'].x, data['ball3'].y));
         });
+        // broadcast the position of black hole
+        MessageManager.broadcast(canvasCoordinateToGlobal(this.blackHole.x, this.blackHole.y));
 
         GameObjectManager.renderGameObjectsByFrame(ctx);
         window.requestAnimationFrame(() => this.updateLevel(ctx));

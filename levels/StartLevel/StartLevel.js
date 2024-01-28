@@ -3,7 +3,7 @@ import {GameObjectManager} from "../../engine/GameObjectManager.js";
 import {StartScreenBackgroundObject} from "../../gameObjects/startLevel/StartScreenBackgroundObject.js";
 import {TestScreenPlanetObject} from "../../gameObjects/startLevel/TestScreenPlanetObject.js";
 import {TitleGameObject} from "../../gameObjects/TitleGameObject.js";
-import {canvasCoordinateToGlobal, getCenterPoint} from "../../engine/utils/CanvasUtils.js";
+import {canvasCoordinateToGlobal, getCenterPoint, globalCoordinateToCanvas} from "../../engine/utils/CanvasUtils.js";
 import {LevelManager} from "../../engine/LevelManager.js";
 import {MessageManager} from "../../engine/MessageManager.js";
 
@@ -27,6 +27,7 @@ export class StartLevel extends BaseLevel {
     // 1 -> when the title page is clicked, but did not enter test page
     // 2 -> in the test page
     static state = 0;
+    static win = null;
 
     static startLevel(ctx) {
         console.log("Side Window of Start Level Init");
@@ -93,9 +94,11 @@ export class StartLevel extends BaseLevel {
         window.addEventListener('click', () => this.nextState());
 
         ctx.canvas.addEventListener('contextmenu', (ev) => {
-            ev.preventDefault();
-            new LevelManager("levels/StartLevel/StartLevel.html", undefined,
-                ctx.canvas.width / window.devicePixelRatio, 0, center.x, center.y);
+            if (this.win === null) {
+                ev.preventDefault();
+                this.win = LevelManager.openNewWindow("levels/StartLevel/StartLevel.html",
+                    ctx.canvas.width / window.devicePixelRatio, 0, 200, 200);
+            }
         }, false);
     }
 
@@ -111,6 +114,25 @@ export class StartLevel extends BaseLevel {
                     'ball3': canvasCoordinateToGlobal(this.testBall3.x, this.testBall3.y),
                 }
             );
+            if (this.win !== null) {
+                MessageManager.setEventListener((data) => {
+                    this.testBall1.setAttractCenter(globalCoordinateToCanvas(data.x, data.y));
+                    this.testBall2.setAttractCenter(globalCoordinateToCanvas(data.x, data.y));
+                    this.testBall3.setAttractCenter(globalCoordinateToCanvas(data.x, data.y));
+                });
+                // set this.win to null if it is closed
+                if (this.win.closed) {
+                    this.win = null;
+                    const center = {
+                        x: ctx.canvas.width / window.devicePixelRatio / 2,
+                        y: ctx.canvas.height / window.devicePixelRatio / 2
+                    };
+                    this.testBall1.setAttractCenter(center);
+                    this.testBall2.setAttractCenter(center);
+                    this.testBall3.setAttractCenter(center);
+                }
+            }
+
         } else {
 
         }
@@ -121,6 +143,7 @@ export class StartLevel extends BaseLevel {
 
     static nextState() {
         if (this.state === 0) {
+            LevelManager.changeToNewScene('empty.html', 300, 300);
             GameObjectManager.clearAllGameObjects();
 
             GameObjectManager.registerGameObject(this.testBall1);
